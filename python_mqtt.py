@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt, json
+import pprint
 
 # MQTT connection details
 MQTT_BROKER_HOST = "10.4.131.115"
@@ -19,6 +20,13 @@ def on_connect(client, userdata, flags, rc):
 def on_message(mqtt_client, userdata, msg):
     print("Received message '" + str(msg.payload) + "' on topic '" + msg.topic + "'")
     #decode message, prep record for database write
+
+    payload_str = msg.payload.decode('utf-8')
+
+    data_dict = json.loads(payload_str)
+    pprint.pprint(data_dict)
+    temperature_F = data_dict["temperature_C"] * 9/5 + 32
+    print(f"Temperature in farenheit: {round(temperature_F)}")
 
 # Set the MQTT client's on_connect and on_message callbacks
 mqtt_client.on_connect = on_connect
