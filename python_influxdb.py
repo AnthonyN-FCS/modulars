@@ -10,7 +10,7 @@ query_where = 'select humidity from modulars where meterID=\'12345\';'
 
 data = [
     {
-        "measurement": "mr_boyd_test",
+        "measurement": "norris",
         "tags": {
             "meterID": "12345",
             "room_name": 'StemLab'
