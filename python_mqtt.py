@@ -7,7 +7,7 @@ MQTT_BROKER_PORT = 1883
 MQTT_TOPIC = "RTL_433"
 
 # Create an MQTT client instance
-mqtt_client = mqtt.Client(client_id='Mr_Boyd_test')
+mqtt_client = mqtt.Client(client_id='norris')
 
 # Callback for when the MQTT client receives a CONNACK response from the MQTT broker
 def on_connect(client, userdata, flags, rc):

@@ -22,6 +22,10 @@ class Sensor:
 
     def check_id(self,id):
         return self.sensorID == id
+    
+    def check_data(self, data):
+        if not data["id"] or not data["temperature_C"] or not data["humididy"]:
+            return False
 
     def send_data(self,temperature_F,temperature_C,humidity,time):
         data = [
@@ -34,7 +38,7 @@ class Sensor:
             "fields": {
                 "temperature_F": temperature_F,
                 "temperature_C": temperature_C,
-                "humidity": humidity
+                "humidity": humidity,
             }
             }
         ]
@@ -45,6 +49,28 @@ class Sensor:
 
         client.close()
         print(f"Received data: {time}")
+
+    def send_data_at_7am(self,temperature_F,temperature_C,humidity):
+        data = [
+        {
+            "measurement": "norris_7am",
+            "tags": {
+                "meterID": self.sensorID,
+                "room_name": self.location,
+            },
+            "fields": {
+                "temperature_F": temperature_F,
+                "temperature_C": temperature_C,
+                "humidity": humidity,
+            }
+            }
+        ]
+
+        client = InfluxDBClient(host = self.influx_host, port = 8086, username = self.username, password = self.password, database = self.database)
+
+        client.write_points(data)
+
+        client.close()
     
 locations = [
     Sensor(10223, 'outside', "anthony"),

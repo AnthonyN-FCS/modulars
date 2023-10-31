@@ -1,0 +1,17 @@
+#this is a service unit file
+#copy this file to /etc/systemd/system/
+#do reload sudo systemctl daemon-reload
+#change permissions for the python script so it can be run as a service
+# chmod +x /home/pi/modulars_project/python_mqtt_influxdb.py
+
+[Unit]
+Description=Python_to_Influx
+[Service]
+Type=simple
+User=anthony_norris
+ExecStart=/home/anthony_norris/modulars/venv/bin/python /home/anthony_norris/modulars/main.py
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
