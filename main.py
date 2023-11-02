@@ -10,6 +10,7 @@ MQTT_TOPIC = "RTL_433"
 
 # Create an MQTT client instance
 mqtt_client = mqtt.Client(client_id='Mr_Boyd_test')
+test_sensor = locations[0]
 
 # Callback for when the MQTT client receives a CONNACK response from the MQTT broker
 def on_connect(client, userdata, flags, rc):
@@ -24,11 +25,9 @@ def on_message(mqtt_client, userdata, msg):
     #decode message, prep record for database write
 
     payload_str = msg.payload.decode('utf-8')
-
     data_dict = json.loads(payload_str)
-
-    for item in locations:
-        if item.check_id(id) and item and item.check_data(data_dict):
+    try:
+        if test_sensor.check_data(data_dict):
             temperature_F = data_dict["temperature_C"] * 9/5 + 32
             temperature_C = data_dict["temperature_C"]
             time = data_dict["time"]
@@ -38,10 +37,14 @@ def on_message(mqtt_client, userdata, msg):
             current_datetime = datetime.datetime.now()
             current_hour = current_datetime.hour
 
-            if current_hour == 7:
-                item.send_data_at_7am(temperature_F,temperature_C,humidity,time)
-            else:
-                item.send_data(temperature_F,temperature_C,humidity,time)
+            for item in locations:
+                if item.check_id(id) and item:
+                    if current_hour == 7:
+                        item.send_data_at_7am(temperature_F,temperature_C,humidity,time)
+                    else:
+                        item.send_data(temperature_F,temperature_C,humidity,time)
+    except:
+        pass
 
 # Set the MQTT client's on_connect and on_message callbacks
 mqtt_client.on_connect = on_connect

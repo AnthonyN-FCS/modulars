@@ -8,7 +8,7 @@ class Sensor:
         self.username = 'python_user'
         self.password = 'python_user_pw'
         self.database = 'modulars_2023'
-        self.influx_host = "10.4.131.115"
+        self.influx_host = "10.4.139.142"
 
         self.sensorID = sensorID
         self.location = location
@@ -24,8 +24,9 @@ class Sensor:
         return self.sensorID == id
     
     def check_data(self, data):
-        if not data["id"] or not data["temperature_C"] or not data["humididy"]:
+        if not data["id"] or not data["temperature_C"] or not data["humidity"]:
             return False
+        return True
 
     def send_data(self,temperature_F,temperature_C,humidity,time):
         data = [
